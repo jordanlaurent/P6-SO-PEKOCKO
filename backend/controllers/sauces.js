@@ -2,18 +2,13 @@ const Sauce = require('../models/sauce')
 const fs = require('fs');
 
 
-// exports.createSauces = (req, res, next) => {
-//const thingObject = JSON.parse(req.body.thing);
-//};
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
-    console.log(sauceObject);
     //delete thingObject._id;
     const sauce = new Sauce({
         ...sauceObject,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
-    console.log(sauce);
     sauce.save()
         .then(() => res.status(201).json({ message: 'Sauce enregistré !' }))
         .catch(error => res.status(400).json({ error }));
@@ -70,4 +65,35 @@ exports.getAllSauces = (req, res, next) => {
             });
         }
     );
+};
+// like ou dislike sauce
+exports.likeSauce = (req, res, next) => {
+    const sauce = JSON.parse(req.body.sauce);
+    console.log(sauce);
+    // mise a jour du contenue de  Sauce 
+    Sauce.updateOne({ _id: req.params.id })
+        // si les deux opérandes ne sont pas égaux alors 
+    if (like != -1) {
+        // creation d'une nouvelle sauce avec 
+        const Sauce = new Sauces({
+            userId: sauce.userId,
+            likes: likes++,
+            dislikes: dislikes--,
+            usersLiked: usersLiked.push(userId),
+        });
+        Sauce.save()
+            .then(() => res.status(201).json({ message: 'J aime enregistrer!' }))
+            .catch(error => res.status(400).json({ error }));
+    } else {
+        const Sauce = new Sauces({
+            userId: sauce.userId,
+            likes: likes++,
+            dislikes: dislikes--,
+            usersLiked: usersLiked.push(userId),
+        });
+        Sauce.save()
+            .then(() => res.status(201).json({ message: 'J aime pas enregistrer!' }))
+            .catch(error => res.status(400).json({ error }));
+    }
+
 };

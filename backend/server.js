@@ -1,7 +1,7 @@
 // server.js permet executer javascript coter server
 
 //const qui permet de crée un serveurnode
-const http = require('http');
+var https = require('http');
 // const qui  permet de comuniquer avec express
 const app = require('./app');
 
@@ -41,7 +41,7 @@ const errorHandler = error => {
     }
 };
 
-const server = http.createServer(app);
+const server = https.createServer(app);
 
 server.on('error', errorHandler);
 server.on('listening', () => {
