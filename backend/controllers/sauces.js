@@ -68,32 +68,42 @@ exports.getAllSauces = (req, res, next) => {
 };
 // like ou dislike sauce
 exports.likeSauce = (req, res, next) => {
-    const sauce = JSON.parse(req.body.sauce);
-    console.log(sauce);
-    // mise a jour du contenue de  Sauce 
-    Sauce.updateOne({ _id: req.params.id })
-        // si les deux opérandes ne sont pas égaux alors 
-    if (like != -1) {
-        // creation d'une nouvelle sauce avec 
-        const Sauce = new Sauces({
-            userId: sauce.userId,
-            likes: likes++,
-            dislikes: dislikes--,
-            usersLiked: usersLiked.push(userId),
-        });
-        Sauce.save()
-            .then(() => res.status(201).json({ message: 'J aime enregistrer!' }))
-            .catch(error => res.status(400).json({ error }));
-    } else {
-        const Sauce = new Sauces({
-            userId: sauce.userId,
-            likes: likes++,
-            dislikes: dislikes--,
-            usersLiked: usersLiked.push(userId),
-        });
-        Sauce.save()
-            .then(() => res.status(201).json({ message: 'J aime pas enregistrer!' }))
-            .catch(error => res.status(400).json({ error }));
+    const id = req.params.id;
+    const user = req.body.userId;
+    console.log(id)
+    console.log(user)
+    switch (req.body.like){
+        case  1:
+                Sauce.updateOne({ _id: id },{
+                $inc: {likes: 1},
+                $push: { usersLiked: user},
+                _id: id
+                })
+                     .then(() => { res.status(201).json({ message: 'like a été ajouté!' }); })
+                     .catch((error) => { res.status(400).json({ error: error }); });
+                 break;
+
+            case 0:
+                Sauce.findOne({ _id: id },{
+                $inc: {likes: 0},
+                $push: { usersliked: user},
+                _id: id
+                })
+                     .then(() => { res.status(201).json({ message: 'remise a zero compteur loke!' }); })
+                     .catch((error) => { res.status(400).json({ error: error }); });
+                 break;
+
+            case -1:
+                Sauce.updateOne({ _id: id },{
+                $inc: {dislikes: 1},
+                $push: { usersDisliked: user},
+                _id: id
+                })
+                     .then(()       => { res.status(201).json({ message: 'dislike a été ajouté!' }); })
+                     .catch((error) => { res.status(400).json({ error  : error }); });
+                 break;
+                 default: console.error('erreur !');
     }
+  console.log(req.body.like);
 
 };
