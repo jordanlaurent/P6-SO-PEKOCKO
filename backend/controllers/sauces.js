@@ -1,5 +1,6 @@
 const Sauce = require('../models/sauce')
 const fs = require('fs');
+const sauce = require('../models/sauce');
 
 
 exports.createSauce = (req, res, next) => {
@@ -70,29 +71,51 @@ exports.getAllSauces = (req, res, next) => {
 exports.likeSauce = (req, res, next) => {
     const id = req.params.id;
     const user = req.body.userId;
-    console.log(id)
-    console.log(user)
     switch (req.body.like){
+        // si like ou dislike = 0
+        case 0: 
+        // recherche des parametre dans sauce
+        sauce.findOne({ _id: id })
+        .then((sauce) =>{
+            // compare si l'id de l'utilisateur est dans le tableau usersliked
+            if(sauce.usersLiked.includes(user)) {
+                // mise a jour de la sauce
+                Sauce.update(
+                { _id: id },
+                // supression du likes
+                {$inc: {likes: -1},
+                // supression de l'id de l'utilisateur dans le tableau usersliked
+                 $pull:{usersLiked: user},})
+            .then(() => { res.status(201).json({ message: 'compteur like a zero!' }); })
+            .catch((error) => { res.status(400).json({ error: error }); });
+            } 
+            
+             else if (sauce.usersDisliked.includes(user)){
+                Sauce.update(
+                { _id: id },
+                {$inc: {dislikes: -1},
+                $pull: { usersDisliked: user},})
+                .then(() => { res.status(201).json({ message: 'compteur dislike a zero!' }); })
+                .catch((error) => { res.status(400).json({ error: error }); });
+            }
+        })
+        // si non trouver on passe aux suivant
+             break;
+        // si like est egal a 1
         case  1:
+            // on ajoute l'id de la sauce dans un tableau  
                 Sauce.updateOne({ _id: id },{
+                    // on incremente likes de 1
                 $inc: {likes: 1},
+                // on ajoute l'id de l'utilisateur dans le tableaux usersliked
                 $push: { usersLiked: user},
                 _id: id
                 })
                      .then(() => { res.status(201).json({ message: 'like a été ajouté!' }); })
                      .catch((error) => { res.status(400).json({ error: error }); });
-                 break;
-
-            case 0:
-                Sauce.findOne({ _id: id },{
-                $inc: {likes: 0},
-                $push: { usersliked: user},
-                _id: id
-                })
-                     .then(() => { res.status(201).json({ message: 'remise a zero compteur loke!' }); })
-                     .catch((error) => { res.status(400).json({ error: error }); });
-                 break;
-
+                // on passe a la suite si ce n'est pas le resultat voulue
+                break;
+            
             case -1:
                 Sauce.updateOne({ _id: id },{
                 $inc: {dislikes: 1},
