@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 const sauceRoutes = require('./routes/sauces');
 const userRoutes = require('./routes/user');
 
-mongoose.connect('mongodb+srv://jordanL:Jojodu45@thehottestreviews.jiytn.mongodb.net/thehottestreviews?retryWrites=true&w=majority', {
+mongoose.connect('mongodb+srv://Openclassroms:Sopekocko@thehottestreviews.jiytn.mongodb.net/thehottestreviews?retryWrites=true&w=majority', {
         useUnifiedTopology: true
     }, { useNewUrlParser: true })
     .then(() => console.log('connexion a MongoDB réussie!'))
