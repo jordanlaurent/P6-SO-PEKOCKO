@@ -9,6 +9,4 @@ Ouvrer la console utiliser la commande "npm install"
 <hr>
 <h3>ETAPE 3 </h3>
 Selectionner le dossier backend dans la console et lancer la commande "nodemon serve"
-<hr>
-<h3>Etape 4</h3>
-Selectionner le dossier frontend dans la console et lancer la commande "ng serve"
+
