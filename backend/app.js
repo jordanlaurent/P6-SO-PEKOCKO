@@ -5,11 +5,12 @@ const bodyParser = require('body-parser');
 const path = require('path');
 // integrons la couche de base de donné de notre serveur mongodg
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 const sauceRoutes = require('./routes/sauces');
 const userRoutes = require('./routes/user');
 
-mongoose.connect('mongodb+srv://Openclassroms:Sopekocko@thehottestreviews.jiytn.mongodb.net/thehottestreviews?retryWrites=true&w=majority', {
+mongoose.connect(process.env.mongo, {
         useUnifiedTopology: true
     }, { useNewUrlParser: true })
     .then(() => console.log('connexion a MongoDB réussie!'))
